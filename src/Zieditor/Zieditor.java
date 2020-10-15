@@ -8,6 +8,7 @@ import java.awt.BorderLayout;
 import javax.swing.*;
 import javax.swing.UIManager.*;
 import java.awt.event.*;
+import java.io.*;
 public class Zieditor extends JFrame implements ActionListener{
 	
 	/**
@@ -23,13 +24,13 @@ public class Zieditor extends JFrame implements ActionListener{
 	JButton save=new JButton("save");
 	
 	
-	
+
 	JButton save_as=new JButton("save_as");
 	JButton open=new JButton("open");
 	JTextArea edit=new JTextArea();
 	
 	JScrollPane scroll=new JScrollPane(edit);
-	
+	String text=edit.getText();
 	 public Zieditor(){
 	        super("Zieditor");
 	        
@@ -40,13 +41,14 @@ public class Zieditor extends JFrame implements ActionListener{
 	        
 	        tool.add(save_as);
 	        tool.addSeparator();
+                save_as.addActionListener(this);
 	        
 	        tool.add(open);
 	        tool.addSeparator();
 	        open.addActionListener(this);
 	        
 	        setLayout(bord);
-	        add("North",tool);
+                add("North",tool);
 	        add("Center",scroll);
 	        
 	        
@@ -61,20 +63,31 @@ public class Zieditor extends JFrame implements ActionListener{
 	                    break;
 	                }
 	            }
-	        } catch (Exception e) {
+	        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e) {
 	            // If Nimbus is not available, you can set the GUI to another look and feel.
 	        }
 	 }
 	 
-	        public void actionPerformed(ActionEvent evt)
+        @Override
+	       public void actionPerformed(ActionEvent evt) 
 	        {
+                    String texts=edit.getText();
 	        	Object source=evt.getSource();
 	        	if(source==save) {
 	        		act.saving();
 	        	}
 	        	if(source==open) {
-	        		act.open();
+                            
+	        		act.open(texts);
+                         
 	        	}
+                        if (source==save_as)
+                                try{
+                                 act.saveAs(texts);
+                                }
+                        catch(IOException se){
+                            
+                        }
 	        }
 	    
 	public static void main(String[] args) {
